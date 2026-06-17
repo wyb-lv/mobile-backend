@@ -77,14 +77,13 @@ router.get('/', requireAuth, asyncHandler(expenseController.getExpenses))
  *               wallet_id:
  *                 type: string
  *                 format: uuid
+ *                 nullable: true
+ *                 description: Optional. Defaults to the user's first wallet when omitted.
  *               direction:
  *                 type: string
  *                 enum: [in, out]
  *               amount:
  *                 type: number
- *               expense_date:
- *                 type: string
- *                 format: date-time
  *               note:
  *                 type: string
  *                 nullable: true
@@ -101,10 +100,8 @@ router.get('/', requireAuth, asyncHandler(expenseController.getExpenses))
  *                 format: uuid
  *                 nullable: true
  *             required:
- *               - wallet_id
  *               - direction
  *               - amount
- *               - expense_date
  *     responses:
  *       201:
  *         description: Created expense
@@ -123,5 +120,73 @@ router.get('/', requireAuth, asyncHandler(expenseController.getExpenses))
  *         description: Missing or invalid token
  */
 router.post('/', requireAuth, asyncHandler(expenseController.createExpense))
+
+/**
+ * @openapi
+ * /expenses/{id}:
+ *   patch:
+ *     tags: [Expense]
+ *     summary: Update an income/expense entry
+ *     description: Edits a transaction; wallet balances and budget allocations update automatically through the views. Only the provided fields are changed.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: The expense id to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               wallet_id:
+ *                 type: string
+ *                 format: uuid
+ *                 nullable: true
+ *                 description: Optional. Defaults to the user's first wallet when omitted.
+ *               direction:
+ *                 type: string
+ *                 enum: [in, out]
+ *               amount:
+ *                 type: number
+ *               note:
+ *                 type: string
+ *                 nullable: true
+ *               category_id:
+ *                 type: string
+ *                 format: uuid
+ *                 nullable: true
+ *               emotion_id:
+ *                 type: string
+ *                 format: uuid
+ *                 nullable: true
+ *               budget_id:
+ *                 type: string
+ *                 format: uuid
+ *                 nullable: true
+ *     responses:
+ *       200:
+ *         description: Updated expense
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *       400:
+ *         description: Invalid input
+ *       401:
+ *         description: Missing or invalid token
+ */
+router.patch('/:id', requireAuth, asyncHandler(expenseController.updateExpense))
 
 export default router

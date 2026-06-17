@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { authController } from '../controllers/auth.controller'
 import { asyncHandler } from '../utils/AsyncHandler'
+import { requireAuth } from '../middlewares/auth'
 
 
 const router = Router()
@@ -76,6 +77,41 @@ router.post('/signup', asyncHandler(authController.signup))
  *         description: Invalid credentials or email not confirmed
  */
 router.post('/login', asyncHandler(authController.login))
+
+/**
+ * @openapi
+ * /auth/password:
+ *   put:
+ *     tags: [Auth]
+ *     summary: Change the authenticated user's password
+ *     description: Verifies the current password, then sets a new one.
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [oldPassword, newPassword]
+ *             properties:
+ *               oldPassword:
+ *                 type: string
+ *                 format: password
+ *                 example: Password123!
+ *               newPassword:
+ *                 type: string
+ *                 format: password
+ *                 example: NewPassword456!
+ *     responses:
+ *       200:
+ *         description: Password updated
+ *       400:
+ *         description: Old password incorrect or invalid input
+ *       401:
+ *         description: Missing or invalid token
+ */
+router.put('/password', requireAuth, asyncHandler(authController.changePassword))
 
 
 export default router

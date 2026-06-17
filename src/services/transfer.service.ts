@@ -28,6 +28,24 @@ async function createTransfer(accessToken: string, userId: string, input: Create
     if (input.from_wallet_id === input.to_wallet_id) {
         throw new Error('from_wallet_id and to_wallet_id must be different')
     }
+
+    // Both wallets must exist and belong to the user, otherwise only one side of
+    // the transfer would be valid and the view balances would not update correctly.
+    const { data: wallets, error: walletsError } = await db
+        .from('wallet_balances')
+        .select('wallet_id, balance')
+        .eq('user_id', userId)
+        .in('wallet_id', [input.from_wallet_id, input.to_wallet_id])
+    if (walletsError) throw new Error(walletsError.message)
+
+    const fromWallet = wallets?.find((w) => w.wallet_id === input.from_wallet_id)
+    const toWallet = wallets?.find((w) => w.wallet_id === input.to_wallet_id)
+    if (!fromWallet) throw new Error('Source wallet not found')
+    if (!toWallet) throw new Error('Destination wallet not found')
+    if (input.amount > (fromWallet.balance ?? 0)) {
+        throw new Error('Transfer amount exceeds the source wallet balance')
+    }
+
     const { data, error } = await db
         .from('wallet_transfers')
         .insert({

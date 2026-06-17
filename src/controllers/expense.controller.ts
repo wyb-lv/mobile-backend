@@ -7,13 +7,24 @@ export const expenseController = {
         res.json(await expenseService.getExpenses(req.accessToken!, req.userId!))
     },
     async createExpense(req: AuthedRequest, res: Response) {
-        const { wallet_id, direction, amount, expense_date, note, category_id, emotion_id, budget_id } = req.body
-        if (!wallet_id || !direction || amount == null || !expense_date) {
-            return res.status(400).json({ message: 'wallet_id, direction, amount and expense_date are required' })
+        const { wallet_id, direction, amount, note, category_id, emotion_id, budget_id } = req.body
+        if (!direction || amount == null) {
+            return res.status(400).json({ message: 'direction and amount are required' })
         }
         const data = await expenseService.createExpense(req.accessToken!, req.userId!, {
-            wallet_id, direction, amount, expense_date, note, category_id, emotion_id, budget_id,
+            wallet_id, direction, amount, note, category_id, emotion_id, budget_id,
         })
         res.status(201).json({ message: 'Expense created', data })
+    },
+    async updateExpense(req: AuthedRequest, res: Response) {
+        const id = req.params.id
+        if (typeof id !== 'string') {
+            return res.status(400).json({ message: 'Expense id is required' })
+        }
+        const { wallet_id, direction, amount, note, category_id, emotion_id, budget_id } = req.body
+        const data = await expenseService.updateExpense(req.accessToken!, req.userId!, id, {
+            wallet_id, direction, amount, note, category_id, emotion_id, budget_id,
+        })
+        res.json({ message: 'Expense updated', data })
     }
 }

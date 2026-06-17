@@ -19,10 +19,19 @@ export interface ExpenseDTO {
 }
 
 export interface CreateExpenseInput {
-    wallet_id: string
+    wallet_id?: string | null
     direction: string
     amount: number
-    expense_date: string
+    note?: string | null
+    category_id?: string | null
+    emotion_id?: string | null
+    budget_id?: string | null
+}
+
+export interface UpdateExpenseInput {
+    wallet_id?: string
+    direction?: string
+    amount?: number
     note?: string | null
     category_id?: string | null
     emotion_id?: string | null
