@@ -93,4 +93,35 @@ const router = Router()
  */
 router.post('/', requireAuth, asyncHandler(transferController.createTransfer))
 
+/**
+ * @openapi
+ * /transfers/{id}:
+ *   delete:
+ *     tags: [Transfer]
+ *     summary: Delete a transfer by id
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: Transfer id to delete
+ *     responses:
+ *       200:
+ *         description: Transfer deleted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       401:
+ *         description: Missing or invalid token
+ */
+router.delete('/:id', requireAuth, asyncHandler(transferController.deleteTransfer))
+
 export default router

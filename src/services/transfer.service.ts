@@ -62,7 +62,19 @@ async function createTransfer(accessToken: string, userId: string, input: Create
     return data
 }
 
+async function deleteTransfer(accessToken: string, userId: string, id: string) {
+    const db = supabaseForUser(accessToken)
+    const { error } = await db
+        .from('wallet_transfers')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', userId)
+    if (error) throw new Error(error.message)
+    return { message: 'Transfer deleted' }
+}
+
 export const transferService = {
     getTransfers,
     createTransfer,
+    deleteTransfer,
 }

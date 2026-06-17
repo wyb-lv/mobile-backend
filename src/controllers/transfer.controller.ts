@@ -1,6 +1,6 @@
-import type {AuthedRequest} from '../middlewares/auth'
-import {transferService} from '../services/transfer.service'
 import type { Response } from 'express'
+import type { AuthedRequest } from '../middlewares/auth'
+import { transferService } from '../services/transfer.service'
 
 export const transferController = {
     async transfer(req: AuthedRequest, res: Response) {
@@ -19,5 +19,13 @@ export const transferController = {
             from_wallet_id, to_wallet_id, amount, transfer_date, note,
         })
         res.status(201).json({ message: 'Transfer created', data })
+    },
+    async deleteTransfer(req: AuthedRequest, res: Response) {
+        const id = req.params.id
+        if (typeof id !== 'string') {
+            return res.status(400).json({ message: 'Transfer id is required' })
+        }
+        const data = await transferService.deleteTransfer(req.accessToken!, req.userId!, id)
+        res.json(data)
     }
 }

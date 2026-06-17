@@ -154,4 +154,36 @@ router.patch('/', requireAuth, asyncHandler(budgetController.updateBudget))
  *         description: Missing or invalid token
  */
 router.put('/allocation', requireAuth, asyncHandler(budgetController.upsertAllocation))
+
+/**
+ * @openapi
+ * /budgets/allocation/{id}:
+ *   delete:
+ *     tags: [Budget]
+ *     summary: Delete a budget allocation by id
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: Budget allocation id to delete
+ *     responses:
+ *       200:
+ *         description: Allocation deleted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       401:
+ *         description: Missing or invalid token
+ */
+router.delete('/allocation/:id', requireAuth, asyncHandler(budgetController.deleteAllocation))
+
 export default router

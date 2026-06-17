@@ -6,6 +6,8 @@ import expenseRoutes from './expense.routes'
 import transferRoutes from './transfer.routes'
 import budgetRoutes from './budget.routes'
 import analyticRoutes from './analytic.routes'
+import spendingGroupRoutes from './spending-group.routes'
+import categoryRoutes from './category.routes'
 
 const router = Router()
 router.use('/auth', authRoutes)
@@ -15,4 +17,6 @@ router.use('/expenses', expenseRoutes)
 router.use('/transfers', transferRoutes)
 router.use('/budgets', budgetRoutes)
 router.use('/analytics', analyticRoutes)
+router.use('/spending-groups', spendingGroupRoutes)
+router.use('/categories', categoryRoutes)
 export default router

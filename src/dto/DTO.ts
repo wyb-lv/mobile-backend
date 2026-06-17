@@ -45,3 +45,49 @@ export interface CreateTransferInput {
     transfer_date: string
     note?: string | null
 }
+
+export interface SpendingGroupDTO {
+    id: string
+    user_id: string
+    name: string
+    description: string | null
+}
+
+export interface CreateSpendingGroupInput {
+    name: string
+    description?: string | null
+}
+
+export interface UpdateSpendingGroupInput {
+    name?: string
+    description?: string | null
+}
+
+export interface CategoryDTO {
+    id: string
+    user_id: string
+    name: string
+    icon: string | null
+}
+
+export interface CreateCategoryInput {
+    name: string
+    icon?: string | null
+}
+
+export interface UpdateCategoryInput {
+    name?: string
+    icon?: string | null
+}
+
+export interface CreateWalletInput {
+    name: string
+    type: 'payment' | 'tracking'
+    opening_balance?: number
+}
+
+export interface UpdateWalletInput {
+    name?: string
+    type?: 'payment' | 'tracking'
+    opening_balance?: number
+}

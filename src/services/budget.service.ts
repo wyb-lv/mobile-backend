@@ -50,8 +50,19 @@ async function upsertAllocation(accessToken: string, budgetId: string, categoryI
     return data
 }
 
+async function deleteAllocation(accessToken: string, id: string) {
+    const db = supabaseForUser(accessToken)
+    const { error } = await db
+        .from('budget_allocations')
+        .delete()
+        .eq('id', id)
+    if (error) throw new Error(error.message)
+    return { message: 'Allocation deleted' }
+}
+
 export const budgetService = {
     getBudget,
     updateBudget,
     upsertAllocation,
+    deleteAllocation,
 }

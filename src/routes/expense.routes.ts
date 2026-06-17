@@ -189,4 +189,35 @@ router.post('/', requireAuth, asyncHandler(expenseController.createExpense))
  */
 router.patch('/:id', requireAuth, asyncHandler(expenseController.updateExpense))
 
+/**
+ * @openapi
+ * /expenses/{id}:
+ *   delete:
+ *     tags: [Expense]
+ *     summary: Delete an expense by id
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: Expense id to delete
+ *     responses:
+ *       200:
+ *         description: Expense deleted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       401:
+ *         description: Missing or invalid token
+ */
+router.delete('/:id', requireAuth, asyncHandler(expenseController.deleteExpense))
+
 export default router

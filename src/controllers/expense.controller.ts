@@ -26,5 +26,13 @@ export const expenseController = {
             wallet_id, direction, amount, note, category_id, emotion_id, budget_id,
         })
         res.json({ message: 'Expense updated', data })
+    },
+    async deleteExpense(req: AuthedRequest, res: Response) {
+        const id = req.params.id
+        if (typeof id !== 'string') {
+            return res.status(400).json({ message: 'Expense id is required' })
+        }
+        const data = await expenseService.deleteExpense(req.accessToken!, req.userId!, id)
+        res.json(data)
     }
 }

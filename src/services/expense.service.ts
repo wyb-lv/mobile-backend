@@ -100,8 +100,20 @@ async function updateExpense(accessToken: string, userId: string, expenseId: str
     return data
 }
 
+async function deleteExpense(accessToken: string, userId: string, id: string) {
+    const db = supabaseForUser(accessToken)
+    const { error } = await db
+        .from('expenses')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', userId)
+    if (error) throw new Error(error.message)
+    return { message: 'Expense deleted' }
+}
+
 export const expenseService = {
     getExpenses,
     createExpense,
     updateExpense,
+    deleteExpense,
 }
