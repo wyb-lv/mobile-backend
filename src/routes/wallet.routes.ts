@@ -45,4 +45,35 @@ const router = Router()
  */
 router.get('/', requireAuth, asyncHandler(walletController.getWallets))
 
+/**
+ * @openapi
+ * /wallets/summary:
+ *   get:
+ *     tags: [Wallet]
+ *     summary: Get total assets split by wallet type
+ *     description: Aggregates balances across all the user's wallets into a total plus payment/tracking breakdown.
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Asset summary
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 total:
+ *                   type: integer
+ *                   format: int64
+ *                 payment:
+ *                   type: integer
+ *                   format: int64
+ *                 tracking:
+ *                   type: integer
+ *                   format: int64
+ *       401:
+ *         description: Missing or invalid token
+ */
+router.get('/summary', requireAuth, asyncHandler(walletController.getWalletSummary))
+
 export default router

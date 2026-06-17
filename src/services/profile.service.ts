@@ -3,8 +3,9 @@ import type { UserDTO } from '../dto/DTO'
 
 async function getProfile(accessToken: string): Promise<UserDTO> {
     const db = supabaseForUser(accessToken)
-    const email = (await supabaseAuth.auth.getUser(accessToken)).data.user?.email
-    const { data, error } = await db.from('profiles').select('*').single()
+    const user = (await supabaseAuth.auth.getUser(accessToken)).data.user
+    const email = user?.email
+    const { data, error } = await db.from('profiles').select('*').eq('id', user?.id).single()
     if (error) throw new Error(error.message)
     const userInfo: UserDTO = {    
         id: data.id,

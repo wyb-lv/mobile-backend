@@ -58,4 +58,70 @@ const router = Router()
  */
 router.get('/', requireAuth, asyncHandler(expenseController.getExpenses))
 
+/**
+ * @openapi
+ * /expenses:
+ *   post:
+ *     tags: [Expense]
+ *     summary: Create an income/expense entry
+ *     description: Adds a transaction; wallet balances update automatically through the wallet_balances view.
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               wallet_id:
+ *                 type: string
+ *                 format: uuid
+ *               direction:
+ *                 type: string
+ *                 enum: [in, out]
+ *               amount:
+ *                 type: number
+ *               expense_date:
+ *                 type: string
+ *                 format: date-time
+ *               note:
+ *                 type: string
+ *                 nullable: true
+ *               category_id:
+ *                 type: string
+ *                 format: uuid
+ *                 nullable: true
+ *               emotion_id:
+ *                 type: string
+ *                 format: uuid
+ *                 nullable: true
+ *               budget_id:
+ *                 type: string
+ *                 format: uuid
+ *                 nullable: true
+ *             required:
+ *               - wallet_id
+ *               - direction
+ *               - amount
+ *               - expense_date
+ *     responses:
+ *       201:
+ *         description: Created expense
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *       400:
+ *         description: Invalid input
+ *       401:
+ *         description: Missing or invalid token
+ */
+router.post('/', requireAuth, asyncHandler(expenseController.createExpense))
+
 export default router

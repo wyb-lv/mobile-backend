@@ -4,6 +4,9 @@ import {walletService} from '../services/wallet.service'
 
 export const walletController = {
     async getWallets(req: AuthedRequest, res: Response) {
-        res.json(await walletService.getWallets(req.accessToken!))
+        res.json(await walletService.getWallets(req.accessToken!, req.userId!))
+    },
+    async getWalletSummary(req: AuthedRequest, res: Response) {
+        res.json(await walletService.getWalletSummary(req.accessToken!, req.userId!))
     }
 }
