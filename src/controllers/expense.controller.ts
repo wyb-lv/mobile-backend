@@ -1,13 +1,9 @@
-import type { Request, Response } from 'express'
+import type { Response } from 'express'
+import type { AuthedRequest } from '../middlewares/auth'
 import { expenseService } from '../services/expense.service'
 
 export const expenseController = {
-    async getExpenses(req: Request, res: Response) {
-        const { wallet_id } = req.query
-        if (typeof wallet_id !== 'string') {
-            res.status(400).json({ error: 'wallet_id is required' })
-            return
-        }
-        res.json(await expenseService.getExpenses(wallet_id))
+    async getExpenses(req: AuthedRequest, res: Response) {
+        res.json(await expenseService.getExpenses(req.accessToken!))
     }
 }

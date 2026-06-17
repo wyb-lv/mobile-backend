@@ -1,22 +1,18 @@
 import {Router} from 'express'
 import {asyncHandler} from '../utils/AsyncHandler'
 import {expenseController} from '../controllers/expense.controller'
+import {requireAuth} from '../middlewares/auth'
 
 const router = Router()
 
 /**
  * @openapi
- * /expense:
+ * /expenses:
  *   get:
  *     tags: [Expense]
- *     summary: Get expenses for a wallet
- *     parameters:
- *       - in: query
- *         name: wallet_id
- *         required: true
- *         schema:
- *           type: string
- *         description: Wallet id to filter expenses
+ *     summary: Get all expenses for the authenticated user
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: List of expenses
@@ -57,7 +53,9 @@ const router = Router()
  *                     nullable: true
  *       400:
  *         description: Missing or invalid wallet_id
+ *       401:
+ *         description: Missing or invalid token
  */
-router.get('/', asyncHandler(expenseController.getExpenses))
+router.get('/', requireAuth, asyncHandler(expenseController.getExpenses))
 
 export default router

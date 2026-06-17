@@ -41,7 +41,7 @@ router.get('/', requireAuth, asyncHandler(profileController.getProfile))
 /**
  * @openapi
  * /profile:
- *   put:
+ *   patch:
  *     tags: [Profile]
  *     summary: Update the current user's profile
  *     security:
@@ -84,6 +84,6 @@ router.get('/', requireAuth, asyncHandler(profileController.getProfile))
  *       401:
  *         description: Missing or invalid token
  */
-router.put('/', requireAuth, asyncHandler(profileController.updateProfile))
+router.patch('/', requireAuth, asyncHandler(profileController.updateProfile))
 
 export default router
