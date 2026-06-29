@@ -6,4 +6,7 @@ db.sql
 hinh_code
 bao-cao-walletio.md
 dac-ta-use-case.md
-tong-hop-code-api.md
+tong-hop-code-api.mds
+walletio/node_modules
+walletio/.expo
+walletio/.agents
