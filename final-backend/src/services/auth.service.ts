@@ -1,4 +1,4 @@
-import { supabaseAuth, supabaseFresh } from '../config/supabase'
+import { supabaseAuth, supabaseFresh, supabaseAdmin, supabaseForUser } from '../config/supabase'
 
 export const authService = {
   async signup(email: string, password: string, name: string) {
@@ -19,6 +19,19 @@ export const authService = {
     if (error) throw new Error(error.message)
     if (!data.session) throw new Error('Invalid refresh token')
     return data.session
+  },
+  async logout(accessToken: string) {
+    // Revoke the session server-side so the refresh token can no longer be
+    // used. The access token itself stays valid until it expires (stateless
+    // JWT), which is the standard Supabase logout behaviour.
+    if (supabaseAdmin) {
+      const { error } = await supabaseAdmin.auth.admin.signOut(accessToken, 'global')
+      if (error) throw new Error(error.message)
+    } else {
+      const { error } = await supabaseForUser(accessToken).auth.signOut()
+      if (error) throw new Error(error.message)
+    }
+    return { message: 'Logged out' }
   },
   async changePassword(accessToken: string, oldPassword: string, newPassword: string) {
     const { data: userData, error: userError } = await supabaseAuth.auth.getUser(accessToken)

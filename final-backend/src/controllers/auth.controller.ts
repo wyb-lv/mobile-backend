@@ -18,6 +18,9 @@ export const authController = {
     }
     res.json(await authService.refresh(refresh_token))
   },
+  async logout(req: AuthedRequest, res: Response) {
+    res.json(await authService.logout(req.accessToken!))
+  },
   async changePassword(req: AuthedRequest, res: Response) {
     const { oldPassword, newPassword } = req.body
     if (!oldPassword || !newPassword) {

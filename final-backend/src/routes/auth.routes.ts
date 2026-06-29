@@ -107,6 +107,23 @@ router.post('/refresh', asyncHandler(authController.refresh))
 
 /**
  * @openapi
+ * /auth/logout:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Log out the authenticated user
+ *     description: Revokes the user's session so the refresh token can no longer be used.
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Logged out
+ *       401:
+ *         description: Missing or invalid token
+ */
+router.post('/logout', requireAuth, asyncHandler(authController.logout))
+
+/**
+ * @openapi
  * /auth/password:
  *   put:
  *     tags: [Auth]
